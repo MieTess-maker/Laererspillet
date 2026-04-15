@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lærerspillet</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>🎓 Lærerspillet</h1>
+
+  <div id="setupBar">
+    <label for="playerCount">Antal spillere:</label>
+    <select id="playerCount">
+      <option value="2">2 spillere</option>
+      <option value="3">3 spillere</option>
+      <option value="4">4 spillere</option>
+      <option value="5">5 spillere</option>
+      <option value="6">6 spillere</option>
+    </select>
+    <button id="startGameBtn">✨ Start / nulstil spil</button>
+  </div>
+
+  <div id="playerLegend"></div>
+
+  <div id="game">
+    <div id="board"></div>
+
+    <div id="controls">
+      <div id="diceWrap">
+        <div id="diceScene">
+          <div id="dice" class="show-1">
+            <div class="face front">
+              <span class="dot center"></span>
+            </div>
+
+            <div class="face back">
+              <span class="dot top-left"></span>
+              <span class="dot top-right"></span>
+              <span class="dot middle-left"></span>
+              <span class="dot middle-right"></span>
+              <span class="dot bottom-left"></span>
+              <span class="dot bottom-right"></span>
+            </div>
+
+            <div class="face right">
+              <span class="dot top-left"></span>
+              <span class="dot top-right"></span>
+              <span class="dot center"></span>
+              <span class="dot bottom-left"></span>
+              <span class="dot bottom-right"></span>
+            </div>
+
+            <div class="face left">
+              <span class="dot top-left"></span>
+              <span class="dot top-right"></span>
+              <span class="dot bottom-left"></span>
+              <span class="dot bottom-right"></span>
+            </div>
+
+            <div class="face top">
+              <span class="dot top-left"></span>
+              <span class="dot center"></span>
+              <span class="dot bottom-right"></span>
+            </div>
+
+            <div class="face bottom">
+              <span class="dot top-left"></span>
+              <span class="dot bottom-right"></span>
+            </div>
+          </div>
+        </div>
+
+        <p id="diceResult">Seneste slag: -</p>
+      </div>
+
+      <button id="rollBtn">🎲 Slå terning</button>
+      <p id="status">Vælg antal spillere og start spillet</p>
+    </div>
+  </div>
+
+  <div id="questionBox" class="popup hidden">
+    <h2 id="question"></h2>
+    <div id="answers"></div>
+  </div>
+
+  <div id="duelBox" class="popup hidden">
+    <h2>⚔️ Duel!</h2>
+    <p><strong>Vinderen går 3 felter frem – taberen går 3 felter tilbage</strong></p>
+    <p id="duelInstruction">Spilleren på duel-feltet vælger først en modstander.</p>
+    <p id="challengeText"></p>
+    <p id="duelTimer">⏱️ Tid tilbage: 15 sek.</p>
+
+    <div id="duelButtons"></div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="challenges.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
