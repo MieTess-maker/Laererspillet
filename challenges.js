@@ -1,5 +1,5 @@
 const challenges = [
-  "Imiter din yndlingslærer i 20 sekunder.",
+  "Imiter din yndlingslærer i 15 sekunder.",
   "Forklar tavleundervisning uden at bruge ordet 'undervisning'.",
   "Vis med kropssprog, hvordan en god lærer starter en time.",
   "Lav en mini-forklaring på 15 sekunder af, hvad didaktik er.",
@@ -12,7 +12,7 @@ const challenges = [
 ];
 const duelChallenges = [
   "Imiter din yndlingslærer i 15 sekunder.",
-  "Forklar didaktik på 10 sekunder uden at stoppe.",
+  "Forklar didaktik på 15 sekunder uden at stoppe.",
   "Vis med kropssprog, hvordan man skaber ro i klassen.",
   "Spil en lærer, der starter timen tydeligt og roligt.",
   "Forklar forskellen på hverdagssprog og skolesprog.",
