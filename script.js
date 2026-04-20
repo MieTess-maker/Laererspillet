@@ -164,9 +164,9 @@ function showDiceFace(value) {
 function getFinalDiceRotation(value) {
   if (value === 1) return "rotateX(0deg) rotateY(0deg)";
   if (value === 2) return "rotateX(90deg) rotateY(0deg)";
-  if (value === 3) return "rotateY(-90deg)";
+  if (value === 3) return "rotateX(-90deg)";
   if (value === 4) return "rotateY(90deg)";
-  if (value === 5) return "rotateX(-90deg)";
+  if (value === 5) return "rotateY(-90deg)";
   return "rotateY(180deg)";
 }
 
@@ -182,10 +182,8 @@ function rollDiceAnimation(finalValue, callback) {
 
   dice.classList.add("rolling");
 
-  const extraX = 720 + Math.floor(Math.random() * 720);
-  const extraY = 720 + Math.floor(Math.random() * 720);
-
-  dice.style.transform = `rotateX(${extraX}deg) rotateY(${extraY}deg)`;
+  // Kun ét rul i animationen
+  dice.style.transform = "rotateY(360deg)";
 
   setTimeout(() => {
     dice.classList.remove("rolling");
@@ -475,25 +473,20 @@ function showDuel() {
       : localDuelChallenges;
 
   const randomChallenge = duelList[Math.floor(Math.random() * duelList.length)];
+
   selectedDuelOpponent = null;
   challengeText.textContent = randomChallenge;
-  duelInstruction.textContent = "Spiller " + currentPlayer + " er landet på duel-feltet. Vælg en modstander.";
-  renderOpponentSelection();
+  duelInstruction.textContent =
+    "Spiller " + currentPlayer + " er landet på duel-feltet. Vælg en modstander.";
+
+  duelButtons.innerHTML = "";
   duelBox.classList.remove("hidden");
 
   clearInterval(duelTimerInterval);
   duelTimeLeft = 15;
-  duelTimerText.textContent = "⏱️ Tid tilbage: 15 sek.";
+  duelTimerText.textContent = "⏱️ Timeren starter først, når I trykker på Start duel.";
 
-  duelTimerInterval = setInterval(() => {
-    duelTimeLeft--;
-    duelTimerText.textContent = "⏱️ Tid tilbage: " + duelTimeLeft + " sek.";
-
-    if (duelTimeLeft <= 0) {
-      clearInterval(duelTimerInterval);
-      duelTimerText.textContent = "⏰ Tiden er gået! Vælg modstander og derefter vinderen.";
-    }
-  }, 1000);
+  renderOpponentSelection();
 }
 
 function renderOpponentSelection() {
@@ -511,9 +504,46 @@ function renderOpponentSelection() {
 
 function selectDuelOpponent(opponent) {
   selectedDuelOpponent = opponent;
-  duelInstruction.textContent =
-    "Spiller " + currentPlayer + " duellerer nu mod Spiller " + opponent + ". Vælg vinderen.";
 
+  duelInstruction.textContent =
+    "Spiller " + currentPlayer + " duellerer nu mod Spiller " + opponent + ". Tryk på Start duel, når I er klar.";
+
+  duelButtons.innerHTML = "";
+
+  const startBtn = document.createElement("button");
+  startBtn.textContent = "▶️ Start duel";
+  startBtn.onclick = () => startDuelTimer(opponent);
+  duelButtons.appendChild(startBtn);
+
+  duelTimerText.textContent = "⏱️ Klar til duel";
+}
+
+function startDuelTimer(opponent) {
+  clearInterval(duelTimerInterval);
+  duelTimeLeft = 15;
+  duelTimerText.textContent = "⏱️ Tid tilbage: 15 sek.";
+
+  duelButtons.innerHTML = "";
+
+  duelTimerInterval = setInterval(() => {
+    duelTimeLeft--;
+    duelTimerText.textContent = "⏱️ Tid tilbage: " + duelTimeLeft + " sek.";
+
+    if (duelTimeLeft <= 0) {
+      clearInterval(duelTimerInterval);
+      duelTimerText.textContent = "⏰ Tiden er gået! Vælg vinderen.";
+      showDuelWinnerButtons(opponent);
+    }
+  }, 1000);
+
+  setTimeout(() => {
+    if (duelTimeLeft > 0) {
+      showDuelWinnerButtons(opponent);
+    }
+  }, 15000);
+}
+
+function showDuelWinnerButtons(opponent) {
   duelButtons.innerHTML = "";
 
   [currentPlayer, opponent].forEach(player => {
@@ -556,3 +586,4 @@ showDiceFace(1);
 rollBtn.disabled = true;
 positions = Array(playerCount).fill(1);
 updateBoard();
+
