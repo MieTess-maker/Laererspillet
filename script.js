@@ -152,10 +152,6 @@ function showDiceFace(value) {
 
   dice.classList.remove("rolling");
   dice.style.transform = `rotateX(${finalRotation.x}deg) rotateY(${finalRotation.y}deg)`;
-
-  diceRotationX = finalRotation.x;
-  diceRotationY = finalRotation.y;
-
   diceResult.textContent = "Seneste slag: " + value;
 }
 
@@ -169,27 +165,26 @@ function getFinalDiceRotation(value) {
 }
 
 function rollDiceAnimation(finalValue, callback) {
-  dice.classList.add("rolling");
-
   const finalRotation = getFinalDiceRotation(finalValue);
 
-  // Samme type rul hver gang
-  const rollX = 720;
-  const rollY = 540;
+  // Nulstil altid til en ren startposition først
+  dice.classList.remove("rolling");
+  dice.style.transition = "none";
+  dice.style.transform = "rotateX(0deg) rotateY(0deg)";
 
-  // Byg animationen ovenpå den nuværende rotation
-  const targetX = diceRotationX + rollX + finalRotation.x;
-  const targetY = diceRotationY + rollY + finalRotation.y;
+  // Tving browseren til at registrere nulstillingen
+  void dice.offsetWidth;
 
-  dice.style.transform = `rotateX(${targetX}deg) rotateY(${targetY}deg)`;
+  // Start den rigtige animation
+  dice.classList.add("rolling");
+  dice.style.transition = "transform 1.4s cubic-bezier(0.17, 0.84, 0.44, 1)";
+  dice.style.transform = `rotateX(${720 + finalRotation.x}deg) rotateY(${720 + finalRotation.y}deg)`;
 
   setTimeout(() => {
+    // Lås terningen fast på slutfladen med små tal igen
     dice.classList.remove("rolling");
-
-    diceRotationX = targetX;
-    diceRotationY = targetY;
-
-    dice.style.transform = `rotateX(${diceRotationX}deg) rotateY(${diceRotationY}deg)`;
+    dice.style.transition = "none";
+    dice.style.transform = `rotateX(${finalRotation.x}deg) rotateY(${finalRotation.y}deg)`;
     diceResult.textContent = "Seneste slag: " + finalValue;
 
     if (callback) callback();
