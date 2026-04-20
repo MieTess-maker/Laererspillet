@@ -28,6 +28,8 @@ let duelTimerInterval = null;
 let duelTimeLeft = 15;
 let gameStarted = false;
 let selectedDuelOpponent = null;
+let diceRotationX = 0;
+let diceRotationY = 0;
 
 const totalTiles = 50;
 const cols = 10;
@@ -146,18 +148,14 @@ function enableSamePlayerTurn(message) {
 }
 
 function showDiceFace(value) {
-  dice.classList.remove(
-    "show-1",
-    "show-2",
-    "show-3",
-    "show-4",
-    "show-5",
-    "show-6",
-    "rolling"
-  );
+  const finalRotation = getFinalDiceRotation(value);
 
-  dice.style.transform = "";
-  dice.classList.add("show-" + value);
+  dice.classList.remove("rolling");
+  dice.style.transform = `rotateX(${finalRotation.x}deg) rotateY(${finalRotation.y}deg)`;
+
+  diceRotationX = finalRotation.x;
+  diceRotationY = finalRotation.y;
+
   diceResult.textContent = "Seneste slag: " + value;
 }
 
@@ -175,28 +173,27 @@ function rollDiceAnimation(finalValue, callback) {
 
   const finalRotation = getFinalDiceRotation(finalValue);
 
-  const extraRollsX = 1260;
-  const extraRollsY = 990;
+  // Samme type rul hver gang
+  const rollX = 720;
+  const rollY = 540;
 
-  const wobbleX = Math.floor(Math.random() * 60) - 30;
-  const wobbleY = Math.floor(Math.random() * 60) - 30;
-
-  const targetX = extraRollsX + finalRotation.x + wobbleX;
-  const targetY = extraRollsY + finalRotation.y + wobbleY;
+  // Byg animationen ovenpå den nuværende rotation
+  const targetX = diceRotationX + rollX + finalRotation.x;
+  const targetY = diceRotationY + rollY + finalRotation.y;
 
   dice.style.transform = `rotateX(${targetX}deg) rotateY(${targetY}deg)`;
 
   setTimeout(() => {
-    dice.style.transform = `rotateX(${extraRollsX + finalRotation.x}deg) rotateY(${extraRollsY + finalRotation.y}deg)`;
+    dice.classList.remove("rolling");
 
-    setTimeout(() => {
-      dice.classList.remove("rolling");
-      dice.style.transform = `rotateX(${finalRotation.x}deg) rotateY(${finalRotation.y}deg)`;
-      diceResult.textContent = "Seneste slag: " + finalValue;
+    diceRotationX = targetX;
+    diceRotationY = targetY;
 
-      if (callback) callback();
-    }, 200);
-  }, 1200);
+    dice.style.transform = `rotateX(${diceRotationX}deg) rotateY(${diceRotationY}deg)`;
+    diceResult.textContent = "Seneste slag: " + finalValue;
+
+    if (callback) callback();
+  }, 1400);
 }
 
 function buildBoard() {
