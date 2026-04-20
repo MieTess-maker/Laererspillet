@@ -162,12 +162,12 @@ function showDiceFace(value) {
 }
 
 function getFinalDiceRotation(value) {
-  if (value === 1) return "rotateX(0deg) rotateY(0deg)";
-  if (value === 2) return "rotateX(90deg) rotateY(0deg)";
-  if (value === 3) return "rotateX(-90deg)";
-  if (value === 4) return "rotateY(90deg)";
-  if (value === 5) return "rotateY(-90deg)";
-  return "rotateY(180deg)";
+  if (value === 1) return { x: 0, y: 0 };
+  if (value === 2) return { x: 90, y: 0 };
+  if (value === 3) return { x: -90, y: 0 };
+  if (value === 4) return { x: 0, y: 90 };
+  if (value === 5) return { x: 0, y: -90 };
+  return { x: 0, y: 180 };
 }
 
 function rollDiceAnimation(finalValue, callback) {
@@ -182,12 +182,20 @@ function rollDiceAnimation(finalValue, callback) {
 
   dice.classList.add("rolling");
 
-  // Kun ét rul i animationen
-  dice.style.transform = "rotateY(360deg)";
+  const finalRotation = getFinalDiceRotation(finalValue);
+
+  // Ekstra hele rul før den lander
+  const extraTurnsX = 720;
+  const extraTurnsY = 720;
+
+  const targetX = extraTurnsX + finalRotation.x;
+  const targetY = extraTurnsY + finalRotation.y;
+
+  dice.style.transform = `rotateX(${targetX}deg) rotateY(${targetY}deg)`;
 
   setTimeout(() => {
     dice.classList.remove("rolling");
-    dice.style.transform = getFinalDiceRotation(finalValue);
+    dice.style.transform = `rotateX(${targetX}deg) rotateY(${targetY}deg)`;
     diceResult.textContent = "Seneste slag: " + finalValue;
 
     if (callback) callback();
