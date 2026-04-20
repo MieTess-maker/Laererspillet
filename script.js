@@ -481,7 +481,7 @@ function showDuel() {
 
   clearInterval(duelTimerInterval);
   duelTimeLeft = 15;
-  duelTimerText.textContent = "⏱️ Timeren starter først, når I trykker på Start duel.";
+  duelTimerText.textContent = "⏱️ Timeren starter først, efter du har valgt modstander, og derefter trykker på Start duel.";
 
   renderOpponentSelection();
 }
