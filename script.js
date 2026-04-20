@@ -184,18 +184,18 @@ function rollDiceAnimation(finalValue, callback) {
 
   const finalRotation = getFinalDiceRotation(finalValue);
 
-  // Ekstra hele rul før den lander
-  const extraTurnsX = 720;
-  const extraTurnsY = 720;
+  // Giver et mere "rullende" forløb
+  const extraRollsX = 4 * 360;
+  const extraRollsY = 3 * 360;
 
-  const targetX = extraTurnsX + finalRotation.x;
-  const targetY = extraTurnsY + finalRotation.y;
+  const targetX = extraRollsX + finalRotation.x;
+  const targetY = extraRollsY + finalRotation.y;
 
   dice.style.transform = `rotateX(${targetX}deg) rotateY(${targetY}deg)`;
 
   setTimeout(() => {
     dice.classList.remove("rolling");
-    dice.style.transform = `rotateX(${targetX}deg) rotateY(${targetY}deg)`;
+    dice.style.transform = `rotateX(${finalRotation.x}deg) rotateY(${finalRotation.y}deg)`;
     diceResult.textContent = "Seneste slag: " + finalValue;
 
     if (callback) callback();
