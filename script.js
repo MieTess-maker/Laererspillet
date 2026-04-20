@@ -171,35 +171,32 @@ function getFinalDiceRotation(value) {
 }
 
 function rollDiceAnimation(finalValue, callback) {
-  dice.classList.remove(
-    "show-1",
-    "show-2",
-    "show-3",
-    "show-4",
-    "show-5",
-    "show-6"
-  );
-
   dice.classList.add("rolling");
 
   const finalRotation = getFinalDiceRotation(finalValue);
 
-  // Giver et mere "rullende" forløb
-  const extraRollsX = 4 * 360;
-  const extraRollsY = 3 * 360;
+  const extraRollsX = 1260;
+  const extraRollsY = 990;
 
-  const targetX = extraRollsX + finalRotation.x;
-  const targetY = extraRollsY + finalRotation.y;
+  const wobbleX = Math.floor(Math.random() * 60) - 30;
+  const wobbleY = Math.floor(Math.random() * 60) - 30;
+
+  const targetX = extraRollsX + finalRotation.x + wobbleX;
+  const targetY = extraRollsY + finalRotation.y + wobbleY;
 
   dice.style.transform = `rotateX(${targetX}deg) rotateY(${targetY}deg)`;
 
   setTimeout(() => {
-    dice.classList.remove("rolling");
-    dice.style.transform = `rotateX(${finalRotation.x}deg) rotateY(${finalRotation.y}deg)`;
-    diceResult.textContent = "Seneste slag: " + finalValue;
+    dice.style.transform = `rotateX(${extraRollsX + finalRotation.x}deg) rotateY(${extraRollsY + finalRotation.y}deg)`;
 
-    if (callback) callback();
-  }, 1400);
+    setTimeout(() => {
+      dice.classList.remove("rolling");
+      dice.style.transform = `rotateX(${finalRotation.x}deg) rotateY(${finalRotation.y}deg)`;
+      diceResult.textContent = "Seneste slag: " + finalValue;
+
+      if (callback) callback();
+    }, 200);
+  }, 1200);
 }
 
 function buildBoard() {
